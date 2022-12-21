@@ -43,12 +43,20 @@ class UserController extends Controller
         ];
 
         $response = $this->httpRequest('GET', 'http://localhost/sharing_is_caring/public/api/profile', $header);
-
+        $responsetransaksi = $this->httpRequest('GET', 'http://localhost/sharing_is_caring/public/api/donasis/transaksi', $header);
+        $data = $responsetransaksi['data'];
+        for ($i = 0; $i < count($data); $i++) {
+            $id = $data[$i]['donasi_id'];
+            $responsedonasi = $this->httpRequest('GET', "http://localhost/sharing_is_caring/public/api/donasi/$id", ['Accept: application/json']);
+            $data[$i]['donasi_id'] = $responsedonasi;
+        }
+        // dd($data);
         return view('profile', [
             "title" => $response['name'],
             "name" => $response['name'],
             "phone" => $response['phone'],
-            "email" => $response['email']
+            "email" => $response['email'],
+            'donasi' => $data
         ]);
     }
 
@@ -124,9 +132,9 @@ class UserController extends Controller
             exit();
         } else {
             return view('login', [
-                'title' => 'Login',
-                'info' => 'failed'
-            ]);
+            "title" => 'Login',
+            'info' => 'failed'
+        ]);
         }
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DonasiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -31,6 +32,11 @@ Route::post('/user/update', [UserController::class, 'update']);
 Route::post('/user/password', [UserController::class, 'password']);
 Route::get('/user/logout', [UserController::class, 'logout']);
 
+Route::get('/donasi', [DonasiController::class, 'index']);
+Route::any('/donasi/add', [DonasiController::class, 'create']);
+Route::get('/donasi/{id}', [DonasiController::class, 'open']);
+Route::any('/donasi/{id}/bayar', [DonasiController::class, 'bayar']);
+// Route::post('/donasi/add/submit', [DonasiController::class, 'create']);
 
 Route::get('/posts', [PostController::class, 'index']);
 

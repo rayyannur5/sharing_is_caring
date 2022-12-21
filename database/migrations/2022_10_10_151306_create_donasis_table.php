@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('donasis', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('desc');
-            $table->decimal('target');
-            $table->date('expired');
+            $table->decimal('target', 24,2);
+            // $table->date('expired');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

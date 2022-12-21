@@ -2,85 +2,119 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDonasiRequest;
-use App\Http\Requests\UpdateDonasiRequest;
-use App\Models\Donasi;
+use Illuminate\Http\Request;
 
 class DonasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    //
+    private function httpRequest($method, $url, $header, $body = [])
     {
-        //
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $body,
+            CURLOPT_HTTPHEADER => $header
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($response, true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function index(){
+        $header = [
+                'Accept: application/json',
+            ];
+    
+            $response = $this->httpRequest('GET', 'http://localhost/sharing_is_caring/public/api/donasi', $header);
+  
+            return view('donasi',["title" => "Donasi", 'donasis' => $response]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreDonasiRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreDonasiRequest $request)
-    {
-        //
+    // public function create(){
+    //     session_start();
+    //     $header = [
+    //         'Accept: application/json',
+    //         "Authorization: Bearer " . $_SESSION['token']
+    //     ];
+    //     $body = [
+    //         'title' => $_POST['title'],
+    //         'desc' => $_POST['desc'],
+    //         'target' => $_POST['target'],
+    //     ];
+
+    //     $response = $this->httpRequest('POST', 'http://localhost/sharing_is_caring/public/api/user/donasis', $header, $body);
+    //     header('Location: /donasi');
+
+    // }
+    public function create(){
+        
+        session_start();
+
+        if(isset($_POST['title'])){
+            $header = [
+            'Accept: application/json',
+            "Authorization: Bearer " . $_SESSION['token']
+        ];
+        $body = [
+            'title' => $_POST['title'],
+            'desc' => $_POST['desc'],
+            'target' => $_POST['target'],
+        ];
+
+        $response = $this->httpRequest('POST', 'http://localhost/sharing_is_caring/public/api/user/donasis', $header, $body);
+        return redirect('/donasi');
+
+        }
+
+        if(isset($_POST['title'])){
+        }
+
+        if(isset($_SESSION['token'])){
+            return view('createDonasi',["title" => "Buat Donasi"]);
+        }else {
+            return view('notLogin',["title" => "Buat Donasi"]);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Donasi  $donasi
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Donasi $donasi)
-    {
-        //
+    public function open($id){
+        $header = [
+                'Accept: application/json',
+            ];
+    
+            $response = $this->httpRequest('GET', "http://localhost/sharing_is_caring/public/api/donasi/$id", $header);
+
+        return view('donasipage', [
+            'title' => $response['title'],
+            'donasi' => $response
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Donasi  $donasi
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Donasi $donasi)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateDonasiRequest  $request
-     * @param  \App\Models\Donasi  $donasi
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateDonasiRequest $request, Donasi $donasi)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Donasi  $donasi
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Donasi $donasi)
-    {
-        //
+    public function bayar($id){
+        if(isset($_POST['name'])){
+            if(!isset($_SESSION['token'])){
+                session_start();
+            }
+            $header = [
+                'Accept: application/json',
+                "Authorization: Bearer " . $_SESSION['token']
+            ];
+            $body = [
+                'donasi_id' => $id,
+                'nominal' => $_POST['nominal'],
+                'metode' => $_POST['metode'],
+            ];
+            $response = $this->httpRequest('POST', "http://localhost/sharing_is_caring/public/api/donasis/transaksi", $header, $body);
+            return redirect('/donasi');
+        }
+        return view('bayarDonasi', ['title' => 'Checkout']);
     }
 }

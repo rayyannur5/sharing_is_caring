@@ -1,38 +1,65 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="/">Sharing is Caring</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+@php
+    function httpRequest($method, $url, $header, $body = [])
+    {
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $body,
+            CURLOPT_HTTPHEADER => $header,
+        ]);
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($response, true);
+    }
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+    if (isset($_SESSION['token'])) {
+        $header = ['Accept: application/json', 'Authorization: Bearer ' . $_SESSION['token']];
+    
+        $response = httpRequest('GET', 'http://localhost/sharing_is_caring/public/api/profile', $header);
+        $name = $response['name'];
+    }
+@endphp
+
+<link rel="stylesheet" href="/assets/css/style.css">
+
+<nav class="navbar navbar-dark navbar-expand-md fixed-top shadow" style="background-color: #62a7d4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-light" href="#">
+            <img src="/assets/img/Logo SIC.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle" />
+            Sharing is Caring
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link {{ $title === 'Home' ? 'active' : '' }}" aria-current="page"
-                        href="/">Home</a>
+                    <a class="nav-link text-light {{ $title === 'Home' ? 'fw-bold' : '' }}" aria-current="page" href="{{ url('/') }}">Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $title === 'Posts' ? 'active' : '' }}" href="/posts">Donasi</a>
+                    <a class="nav-link text-light {{ $title === 'Donasi' ? 'fw-bold' : '' }}" href="{{ url('/donasi') }}">Donasi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $title === 'Iuran' ? 'active' : '' }}" href="/about">Iuran</a>
+                    <a class="nav-link text-light {{ $title === 'Iuran' ? 'fw-bold' : '' }}" href="{{ url('/iuran') }}">Iuran</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
             @if (isset($_SESSION['token']))
-                <a href="{{ url('/user') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-person-circle ms-2" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                        <path fill-rule="evenodd"
-                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
+                <a class="text-decoration-none text-light" href="{{ url('/user') }}">
+                    {{ $name }}
                 </a>
             @else
-                <a href="/login"><button class="btn btn-outline-light bg-danger ms-2" type="submit">Login</button></a>
+                <a href="/login"><button class="btn btn-outline-light me-2 rounded-pill " type="submit">Login</button></a>
             @endif
         </div>
     </div>

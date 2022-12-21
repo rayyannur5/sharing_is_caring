@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transaksi_donasis', function (Blueprint $table) {
+        Schema::create('transaksi_donasi_guests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('donasi_id');
-            $table->decimal('nominal', 24, 2, true);
-            $table->string('metode');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('name');
+            $table->string('nominal');
+            $table->string('payment_method');
             $table->foreign('donasi_id')->references('id')->on('donasis')->onDelete('cascade');
             $table->timestamps();
         });
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaksi_donasis');
+        Schema::dropIfExists('transaksi_donasi_guests');
     }
 };
