@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #e6f7fd;
+}
+
+nav {
+  background-color: #62a7d4;
+}
+
+.box {
+  height: 370px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 25px;
+}
+
+.hero {
+  position: absolute;
+  width: 1512px;
+  height: 331px;
+  left: 0px;
+  top: 0px;
+}
+
+.form-inline {
+  position: absolute;
+  width: 834px;
+  height: 60px;
+  left: 339px;
+  top: 200px;
+}
+
+.text-hero {
+  position: absolute;
+  width: 286px;
+  height: 72px;
+  left: 613px;
+  top: 142px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 72px;
+
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
+}
+
+/* .row {
+    position: absolute;
+    width: 1053px;
+    height: 396px;
+    left: 242px;
+    top: 491px;
+  } */
+
+.text-donasi {
+  position: absolute;
+  width: 200px;
+  height: 35px;
+  left: 151px;
+  top: 850px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 35px;
+
+  display: flex;
+  align-items: center;
+
+  color: #000000;
+}
+
+.card-panti1 {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 151px;
+  top: 900px;
+}
+
+.card-merapi {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 584px;
+  top: 900px;
+}
+
+.card-panti2 {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 1017px;
+  top: 900px;
+}
+
+.text-donasisekitar {
+  position: absolute;
+  width: 348px;
+  height: 48px;
+  left: 151px;
+  top: 1350px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  color: #000000;
+}
+
+.card-banjir {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 151px;
+  top: 1400px;
+}
+
+.card-panti3 {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 584px;
+  top: 1400px;
+}
+
+.card-tsunami {
+  position: absolute;
+  width: 370px;
+  height: 502px;
+  left: 1017px;
+  top: 1400px;
+}
+.bg-cardbuatdonasi {
+  position: absolute;
+  width: 1268px;
+  height: 379px;
+  left: 135px;
+  top: 2000px;
+}
+
+.card-buatdonasi {
+  position: absolute;
+  width: 531px;
+  height: 84px;
+  left: 792px;
+  top: 2125px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 42px;
+
+  color: #f4dede;
+}
+
+.card-picbuatdonasi {
+  position: absolute;
+  width: 1268px;
+  height: 379px;
+  left: 300px;
+  top: 2000px;
+
+  filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.25));
+}
